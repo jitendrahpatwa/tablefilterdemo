@@ -9,6 +9,7 @@ declare const Tabulator: any;
 export class SearchviewComponent implements OnInit {
 
   pageNo = 0;
+  size = 10;
   totalSize = 5000;
 
   constructor(
@@ -34,7 +35,7 @@ export class SearchviewComponent implements OnInit {
       ajaxConfig: 'GET', // ajax HTTP request type
       ajaxContentType: 'json',
       pagination: 'remote',
-      paginationSize: 10,
+      paginationSize: this.size,
       paginationSizeSelector: [10, 20, 50, 100],
       placeholder: 'No Data Set',
       tooltips: true,
@@ -48,6 +49,7 @@ export class SearchviewComponent implements OnInit {
       ajaxURLGenerator: (url: any, config: any, params: any) => {
         console.log('req', url, params, config);
         this.pageNo = params?.page;
+        this.size = params?.size;
         return url + '?page=' + params?.page + '&results=' + params?.size;
       },
       ajaxResponse: (url: any, params: any, response: any) => {
@@ -68,7 +70,7 @@ export class SearchviewComponent implements OnInit {
 
         // return results; // return the tableData property of a response json object
         return {
-          last_page: this.totalSize / this.pageNo, // the total number of available pages (this value must be greater than 0)
+          last_page: this.totalSize / this.size, // the total number of available pages (this value must be greater than 0)
           data: results
         };
       },
